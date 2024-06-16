@@ -1,0 +1,150 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import MilkdownMenu from "../../components/editor/MilkdownMenu.astro";
+import "github-markdown-css/github-markdown.css";
+import "../../assets/markdown.scss";
+import "../../assets/milkdown.scss";
+import "@fontsource-variable/material-symbols-outlined";
+---
+
+<BaseLayout title="記録エディター" breadcrumbs={[{ title: "Top" }]}>
+    <header>
+        <div>
+            <p>タイトル</p><div class="prose h1" id="prose-title"></div>
+        </div>
+        <div>
+            <p>ファイル名</p><div class="prose h2" id="prose-filename"></div>
+        </div>
+        <MilkdownMenu />
+    </header>
+    <main id="milkdown">
+    </main>
+</BaseLayout>
+
+<script>
+    import {
+        Editor,
+        rootCtx,
+        defaultValueCtx,
+        editorViewOptionsCtx,
+    } from "@milkdown/core";
+    import { commonmark } from "@milkdown/preset-commonmark";
+    import { gfm } from "@milkdown/preset-gfm";
+    import { history } from "@milkdown/plugin-history";
+    //import { splitEditing } from "@milkdown-lab/plugin-split-editing";
+
+    import { EditorState } from "prosemirror-state";
+    import { EditorView } from "prosemirror-view";
+    import { Schema } from "prosemirror-model";
+
+    import {
+        menu,
+        menuListener,
+    } from "../../components/editor/MilkdownMenu.ts";
+
+    const proseTitle = new EditorView(document.querySelector("#prose-title"), {
+        state: EditorState.create({
+            schema: new Schema({
+                nodes: {
+                    doc: {
+                        content: "block+",
+                    },
+                    paragraph: {
+                        content: "text*",
+                        group: "block",
+                    },
+                    text: {
+                        group: "inline",
+                    },
+                },
+            }),
+        }),
+    });
+
+    const proseFilename = new EditorView(
+        document.querySelector("#prose-filename"),
+        {
+            state: EditorState.create({
+                schema: new Schema({
+                    nodes: {
+                        doc: {
+                            content: "block+",
+                        },
+                        paragraph: {
+                            content: "text*",
+                            group: "block",
+                        },
+                        text: {
+                            group: "inline",
+                        },
+                    },
+                }),
+            }),
+        }
+    );
+
+    Editor.make()
+        .config((ctx) => {
+            ctx.set(rootCtx, "#milkdown");
+            ctx.set(
+                defaultValueCtx,
+                "# Hello, Milkdown!\n\n本文をここに入力してください。"
+            );
+            ctx.update(editorViewOptionsCtx, (prev) => ({
+                ...prev,
+                attributes: { class: "markdown-body" },
+            }));
+        })
+        .use(commonmark)
+        .use(gfm)
+        .use(history)
+        //.use(splitEditing)
+        .use(menu)
+        .create()
+        .then(menuListener);
+</script>
+
+<style lang="scss">
+    header {
+        display: flex;
+        justify-content: stretch;
+        flex-wrap: wrap;
+        > div {
+            flex: 1;
+            padding: 1rem;
+            p {
+                font-size: 0.8rem;
+                color: #666;
+            }
+            .prose {
+                width: 100%;
+                font-size: 1.5rem;
+                background: #666;
+            }
+        }
+    }
+    main {
+        margin: auto;
+        max-width: 1500px;
+        padding: 1rem;
+    }
+    .milkdown {
+        /*
+        .split-editor {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .milkdown-split-editor {
+            &.hidden {
+                display: none;
+            }
+        }
+        */
+
+        .editor {
+            padding: 1rem auto;
+            min-height: 100vh;
+        }
+    }
+</style>
