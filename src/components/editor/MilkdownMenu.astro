@@ -80,12 +80,12 @@ const menuItems: ({
             label: "番号付きリストにする",
             key: "WrapInOrderedList",
         },
-        {
+        /*{
             type: 'button',
             icon: 'checklist',
             label: 'タスクリストにする',
             key: 'TurnIntoTaskList',
-        },
+        },*/
         {
             type: "button",
             icon: "format_indent_decrease",
@@ -144,7 +144,6 @@ const menuItems: ({
 ];
 ---
 
-<nav>
 <div class="milkdown-menu">
     <ul role="menubar" aria-label="Editor menubar">
         {menuItems.map(
@@ -178,27 +177,11 @@ const menuItems: ({
         )}
     </ul>
 </div>
-</nav>
 
 <style lang="scss">
-
-nav {
-    position: sticky;
-    top: 1rem;
-}
-
 .milkdown-menu {
-    --menu-bg: #2e3440;
-    --menu-border: #434b5e;
-    --menu-bg-hover: #81a1c11f;
-    --menu-text-hover: #5e81ac;
-    background-color: var(--menu-bg);
     overflow-x: scroll;
     overflow-y: visible;
-    border: 1px var(--menu-border) solid;
-    border-radius: 3rem;
-    box-shadow: #2e3440;
-    margin-bottom: 2rem;
 
     &::-webkit-scrollbar {
         height: 2px;
@@ -231,7 +214,7 @@ nav {
         margin: 8px 0;
         font-size: 1rem;
         background-color: transparent;
-        color: white;
+        color: var(--menu-text);
         cursor: pointer;
 
         &:not(:only-child) {
@@ -264,6 +247,8 @@ nav {
 
     ul {
         list-style: none;
+        margin: 0;
+        background-color: var(--menu-bg);
 
         &[role="menubar"] {
             display: flex;
@@ -277,7 +262,6 @@ nav {
             position: absolute;
             border: 1px solid var(--menu-border);
             background-color: var(--menu-bg);
-            z-index: 100;
 
             &.show {
                 display: block;
@@ -285,7 +269,7 @@ nav {
 
             li[role="menuitem"] {
                 padding: 6px;
-                color: white;
+                color: var(--menu-text);
                 cursor: pointer;
                 padding: 0.75rem 1rem;
                 font-size: 14px;

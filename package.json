@@ -18,6 +18,8 @@
     "@fontsource-variable/material-symbols-outlined": "^5.0.33",
     "@milkdown-lab/plugin-split-editing": "^1.2.3",
     "@milkdown/core": "^7.3.6",
+    "@milkdown/plugin-clipboard": "^7.3.6",
+    "@milkdown/plugin-cursor": "^7.3.6",
     "@milkdown/plugin-history": "^7.3.6",
     "@milkdown/plugin-tooltip": "^7.3.6",
     "@milkdown/preset-commonmark": "^7.3.6",

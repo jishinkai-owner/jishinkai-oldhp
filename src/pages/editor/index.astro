@@ -5,20 +5,36 @@ import "github-markdown-css/github-markdown.css";
 import "../../assets/markdown.scss";
 import "../../assets/milkdown.scss";
 import "@fontsource-variable/material-symbols-outlined";
+import "prosemirror-view/style/prosemirror.css";
 ---
 
 <BaseLayout title="記録エディター" breadcrumbs={[{ title: "Top" }]}>
     <header>
-        <div>
-            <p>タイトル</p><div class="prose h1" id="prose-title"></div>
-        </div>
-        <div>
-            <p>ファイル名</p><div class="prose h2" id="prose-filename"></div>
+        <div class="frontmatter">
+            <div class="title">
+                <label for="title">タイトル</label>
+                <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    placeholder="男体山 Team HONOKA"
+                    required
+                />
+            </div>
+            <div class="filename">
+                <label for="filename">ファイル名</label>
+                <input
+                    type="text"
+                    id="filename"
+                    name="filename"
+                    placeholder="2024_nanntai_HONOKA"
+                    required
+                />
+            </div>
         </div>
         <MilkdownMenu />
     </header>
-    <main id="milkdown">
-    </main>
+    <main id="milkdown"></main>
 </BaseLayout>
 
 <script>
@@ -31,64 +47,21 @@ import "@fontsource-variable/material-symbols-outlined";
     import { commonmark } from "@milkdown/preset-commonmark";
     import { gfm } from "@milkdown/preset-gfm";
     import { history } from "@milkdown/plugin-history";
-    //import { splitEditing } from "@milkdown-lab/plugin-split-editing";
-
-    import { EditorState } from "prosemirror-state";
-    import { EditorView } from "prosemirror-view";
-    import { Schema } from "prosemirror-model";
+    import { clipboard } from "@milkdown/plugin-clipboard";
+    import { cursor } from "@milkdown/plugin-cursor";
+    import { splitEditing } from "@milkdown-lab/plugin-split-editing";
 
     import {
         menu,
         menuListener,
     } from "../../components/editor/MilkdownMenu.ts";
 
-    const proseTitle = new EditorView(document.querySelector("#prose-title"), {
-        state: EditorState.create({
-            schema: new Schema({
-                nodes: {
-                    doc: {
-                        content: "block+",
-                    },
-                    paragraph: {
-                        content: "text*",
-                        group: "block",
-                    },
-                    text: {
-                        group: "inline",
-                    },
-                },
-            }),
-        }),
-    });
-
-    const proseFilename = new EditorView(
-        document.querySelector("#prose-filename"),
-        {
-            state: EditorState.create({
-                schema: new Schema({
-                    nodes: {
-                        doc: {
-                            content: "block+",
-                        },
-                        paragraph: {
-                            content: "text*",
-                            group: "block",
-                        },
-                        text: {
-                            group: "inline",
-                        },
-                    },
-                }),
-            }),
-        }
-    );
-
     Editor.make()
         .config((ctx) => {
             ctx.set(rootCtx, "#milkdown");
             ctx.set(
                 defaultValueCtx,
-                "# Hello, Milkdown!\n\n本文をここに入力してください。"
+                "# Hello, Milkdown!\n\n本文をここに入力してください。",
             );
             ctx.update(editorViewOptionsCtx, (prev) => ({
                 ...prev,
@@ -98,7 +71,9 @@ import "@fontsource-variable/material-symbols-outlined";
         .use(commonmark)
         .use(gfm)
         .use(history)
-        //.use(splitEditing)
+        .use(clipboard)
+        .use(cursor)
+        .use(splitEditing)
         .use(menu)
         .create()
         .then(menuListener);
@@ -106,26 +81,66 @@ import "@fontsource-variable/material-symbols-outlined";
 
 <style lang="scss">
     header {
-        display: flex;
-        justify-content: stretch;
-        flex-wrap: wrap;
-        > div {
-            flex: 1;
+        --menu-bg: #f8f8f8;
+        --menu-border: #e0e0e0;
+        --menu-bg-hover: #e0e0e01f;
+        --menu-text-hover: #5e81ac;
+        --menu-text: rgb(var(--on-background));
+        position: sticky;
+        top: 0;
+        background-color: var(--menu-bg);
+        box-shadow: 0 0 5px 2px;
+        border-bottom: 1px var(--menu-border) solid;
+        margin-bottom: 2rem;
+        z-index: 100;
+
+        @media (prefers-color-scheme: dark) {
+            --menu-bg: #2e3440;
+            --menu-border: #434b5e;
+            --menu-bg-hover: #81a1c11f;
+            --menu-text-hover: #5e81ac;
+            box-shadow: none;
+        }
+
+        .frontmatter {
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: stretch;
+            gap: 10%;
             padding: 1rem;
-            p {
-                font-size: 0.8rem;
-                color: #666;
-            }
-            .prose {
-                width: 100%;
-                font-size: 1.5rem;
-                background: #666;
+            border-bottom: 1px var(--menu-border) solid;
+
+            > div {
+                flex: 1 1 40%;
+                padding: 0 1rem;
+                display: flex;
+                flex-flow: row nowrap;
+                justify-content: stretch;
+                align-items: center;
+                label {
+                    display: block;
+                    font-size: 1rem;
+                    width: 6rem;
+                }
+                input {
+                    flex: 1 1 auto;
+                    padding: 0.5rem;
+                    font-size: 1rem;
+                    background: none;
+                    border: none;
+                    border-bottom: 1px solid var(--menu-border);
+                    color: rgb(var(--on-background));
+
+                    &:focus {
+                        background: var(--menu-bg-hover);
+                    }
+                }
             }
         }
     }
     main {
         margin: auto;
-        max-width: 1500px;
+        max-width: 872px;
         padding: 1rem;
     }
     .milkdown {
