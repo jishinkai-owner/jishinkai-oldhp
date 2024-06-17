@@ -30,6 +30,7 @@ import "prosemirror-view/style/prosemirror.css";
                     placeholder="2024_nanntai_HONOKA"
                     required
                 />
+                <label for="filename">.md</label>
             </div>
         </div>
         <MilkdownMenu />
@@ -49,6 +50,7 @@ import "prosemirror-view/style/prosemirror.css";
     import { history } from "@milkdown/plugin-history";
     import { clipboard } from "@milkdown/plugin-clipboard";
     import { cursor } from "@milkdown/plugin-cursor";
+    import { trailing } from "@milkdown/plugin-trailing";
     import { splitEditing } from "@milkdown-lab/plugin-split-editing";
 
     import {
@@ -61,7 +63,7 @@ import "prosemirror-view/style/prosemirror.css";
             ctx.set(rootCtx, "#milkdown");
             ctx.set(
                 defaultValueCtx,
-                "# Hello, Milkdown!\n\n本文をここに入力してください。",
+                "# Hello, Milkdown!\n\n本文をここに入力してください。"
             );
             ctx.update(editorViewOptionsCtx, (prev) => ({
                 ...prev,
@@ -73,6 +75,7 @@ import "prosemirror-view/style/prosemirror.css";
         .use(history)
         .use(clipboard)
         .use(cursor)
+        .use(trailing)
         .use(splitEditing)
         .use(menu)
         .create()
@@ -140,26 +143,31 @@ import "prosemirror-view/style/prosemirror.css";
     }
     main {
         margin: auto;
-        max-width: 872px;
         padding: 1rem;
     }
+</style>
+
+<style lang="scss" is:global>
     .milkdown {
-        /*
         .split-editor {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: center;
+            .milkdown-split-editor {
+                flex: 1 0 872px;
+                max-width: 872px;
 
-        .milkdown-split-editor {
-            &.hidden {
-                display: none;
+                &.hidden {
+                    display: none;
+                }
             }
-        }
-        */
 
-        .editor {
-            padding: 1rem auto;
-            min-height: 100vh;
+            .editor {
+                flex: 1 0 872px;
+                max-width: 872px;
+                padding: 1rem auto;
+                min-height: 100vh;
+            }
         }
     }
 </style>
