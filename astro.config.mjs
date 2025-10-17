@@ -4,7 +4,6 @@ import fs2sitemap from "./integrations/sitemap.ts";
 import remarkMath from "remark-math";
 import remarkToc from "remark-toc";
 import { remarkAlert } from "remark-github-blockquote-alert";
-import remarkRehype from "remark-rehype";
 import rehypeKatex from "rehype-katex";
 
 // https://astro.build/config
@@ -31,7 +30,7 @@ export default defineConfig({
         rehypePlugins: [rehypeKatex],
     },
     build: {
-        format: "preserve",
+        format: "file",
     },
     site: "https://jishinkaihp.web.fc2.com",
 });
