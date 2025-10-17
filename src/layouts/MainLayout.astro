@@ -145,6 +145,9 @@ const img = images[type] ?? images["yama"];
             </li>
         </ul>
         <p><Image src={line} alt="" loading="eager" /></p>
+        <div class="new-site-link">
+            <p><a href="https://jishinkai.club/" target="_blank">新サイトはこちら</a></p>
+        </div>
         <div class="social_links">
             <a
                 href="https://twitter.com/jishinkai"
@@ -266,6 +269,15 @@ const img = images[type] ?? images["yama"];
                 padding: 0;
                 li {
                     display: block;
+                }
+            }
+
+            .new-site-link {
+                margin: 0.5rem 0;
+                font-size: 1rem;
+
+                p {
+                    margin: 0;
                 }
             }
 
