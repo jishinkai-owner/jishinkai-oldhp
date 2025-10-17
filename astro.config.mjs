@@ -34,14 +34,4 @@ export default defineConfig({
         format: "preserve",
     },
     site: "https://jishinkaihp.web.fc2.com",
-
-    redirects: {
-        '/': 'https://jishinkai.club/',
-        '/yama': 'https://jishinkai.club/record/yama',
-        '/tabi': 'https://jishinkai.club/record/tabi',
-        '/tsuri': 'https://jishinkai.club/record/tsuri',
-        '/qa': 'https://jishinkai.club/qa',
-        '/member': 'https://jishinkai.club/member',
-        '/other/shinkan2025': 'https://jishinkai.club/shinkan',
-    },
 });
