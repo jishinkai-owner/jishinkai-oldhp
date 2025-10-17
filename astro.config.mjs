@@ -31,7 +31,7 @@ export default defineConfig({
         rehypePlugins: [rehypeKatex],
     },
     build: {
-        format: "file",
+        format: "directory",
     },
     site: "https://jishinkaihp.web.fc2.com",
 });
